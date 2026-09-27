@@ -52,7 +52,7 @@ ask instead of deviating.
 
 ## Verification before opening a PR
 
-- `npm run check` must pass (TypeScript typecheck against the Pi extension
+- `pnpm run check` must pass (TypeScript typecheck against the Pi extension
   types).
 - For flake changes, validate all declared systems (`nix flake check`, or at
   minimum `nix eval` of each `devShells.<system>.default`).
@@ -62,6 +62,8 @@ ask instead of deviating.
 
 - Node >= 22.19 (Pi's engines requirement). `nix develop` provides the full
   dev shell: node, git, and platform notification tools.
+- Package management is pnpm (pinned via `packageManager` in `package.json` and
+  provided by the Nix dev shell). Use pnpm — not npm — for installs and scripts.
 - The `pi` manifest in `package.json` is the loading contract for package
   installs — keep `pi.extensions` accurate when moving or adding extension
   entry points.
