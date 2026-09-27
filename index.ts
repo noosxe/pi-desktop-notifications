@@ -46,6 +46,7 @@ export function readConfig(): NotifyConfig {
 	const minInterval = env.PI_NOTIFY_MIN_INTERVAL
 		? Number.parseInt(env.PI_NOTIFY_MIN_INTERVAL, 10)
 		: Number.NaN;
+	const abortFlag = (env.PI_NOTIFY_ABORT ?? "").toLowerCase();
 	return {
 		enabled: env.PI_NOTIFY !== "0",
 		sound:
@@ -55,7 +56,7 @@ export function readConfig(): NotifyConfig {
 		urgency:
 			urgency === "low" || urgency === "critical" ? urgency : "normal",
 		notifyOnPrompt: env.PI_NOTIFY_PROMPT !== "0",
-		notifyOnAbort: env.PI_NOTIFY_ABORT === "1",
+		notifyOnAbort: abortFlag === "1" || abortFlag === "true",
 		minIntervalMs: Number.isNaN(minInterval)
 			? 1500
 			: Math.max(0, minInterval),
