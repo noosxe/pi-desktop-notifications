@@ -4,6 +4,9 @@
 	"description": "Pi coding agent extension: native desktop notifications on macOS and Linux when the agent needs input or finishes a run",
 	"type": "module",
 	"main": "index.ts",
+	"pi": {
+		"extensions": ["./index.ts"]
+	},
 	"scripts": {
 		"check": "tsc --noEmit"
 	},
