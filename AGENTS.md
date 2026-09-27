@@ -96,6 +96,9 @@ ask instead of deviating.
   dev shell: node, git, and platform notification tools.
 - Package management is pnpm (pinned via `packageManager` in `package.json` and
   provided by the Nix dev shell). Use pnpm — not npm — for installs and scripts.
+- If direnv is set up, the dev shell (node, pnpm, git, notification tools) loads
+  automatically under this repo after a one-time `direnv allow` by the user;
+  otherwise run commands through `nix develop -c sh -c '...'`.
 - The `pi` manifest in `package.json` is the loading contract for package
   installs — keep `pi.extensions` accurate when moving or adding extension
   entry points.

@@ -124,6 +124,9 @@ and the notification tools for your platform (`terminal-notifier` on macOS,
 nix develop
 ```
 
+
+If you use [direnv](https://direnv.net/), `direnv allow` once in the repo root loads the
+same shell automatically whenever you `cd` in — no `nix develop` wrapper needed.
 Supports `x86_64-linux`, `aarch64-linux`, and `aarch64-darwin` (Apple Silicon;
 nixpkgs 26.11 dropped Intel Mac support).
 
