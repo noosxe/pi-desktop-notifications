@@ -25,7 +25,7 @@ import type {
 // Configuration
 // ---------------------------------------------------------------------------
 
-interface NotifyConfig {
+export interface NotifyConfig {
 	/** Master switch (PI_NOTIFY, default on). */
 	enabled: boolean;
 	/** macOS notification sound; "" or "none" disables (PI_NOTIFY_SOUND). */
@@ -40,7 +40,7 @@ interface NotifyConfig {
 	minIntervalMs: number;
 }
 
-function readConfig(): NotifyConfig {
+export function readConfig(): NotifyConfig {
 	const env = process.env;
 	const urgency = (env.PI_NOTIFY_URGENCY ?? "normal").toLowerCase();
 	return {
@@ -100,7 +100,7 @@ async function hasBinary(
 }
 
 /** Ordered backend candidates for the current platform. */
-async function backendCandidates(
+export async function backendCandidates(
 	pi: ExtensionAPI,
 	force = false,
 ): Promise<Backend[]> {
@@ -117,7 +117,7 @@ async function backendCandidates(
 	return out;
 }
 
-function appleScriptEscape(s: string): string {
+export function appleScriptEscape(s: string): string {
 	return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
@@ -125,7 +125,7 @@ function appleScriptEscape(s: string): string {
  * OSC fallback: Ghostty/iTerm2/WezTerm/rxvt understand 777, Kitty uses 99.
  * Only written when stdout is a TTY so print/JSON mode output stays clean.
  */
-function sendOsc(title: string, body: string): boolean {
+export function sendOsc(title: string, body: string): boolean {
 	if (!process.stdout.isTTY) return false;
 	try {
 		if (process.env.KITTY_WINDOW_ID) {
@@ -145,7 +145,7 @@ interface SendOptions {
 	isError?: boolean;
 }
 
-async function sendWithBackend(
+export async function sendWithBackend(
 	pi: ExtensionAPI,
 	backend: Backend,
 	title: string,
@@ -171,11 +171,11 @@ async function sendWithBackend(
 		}
 		case "osascript": {
 			const sound = config.sound
-				? ` sound name ${appleScriptEscape(config.sound)}`
+				? ` sound name "${appleScriptEscape(config.sound)}"`
 				: "";
 			const script =
-				`display notification ${appleScriptEscape(body)} ` +
-				`with title ${appleScriptEscape(title)}${sound}`;
+				`display notification "${appleScriptEscape(body)}" ` +
+				`with title "${appleScriptEscape(title)}"${sound}`;
 			const res = await pi.exec("osascript", ["-e", script], {
 				timeout: 5000,
 			});
@@ -243,13 +243,13 @@ async function sendNotification(
 // Helpers
 // ---------------------------------------------------------------------------
 
-function projectName(cwd: string): string {
+export function projectName(cwd: string): string {
 	const parts = cwd.split("/").filter(Boolean);
 	return parts[parts.length - 1] ?? cwd;
 }
 
 /** Flatten a message down to a single-line snippet for notification bodies. */
-function toSnippet(text: string, max = 140): string {
+export function toSnippet(text: string, max = 140): string {
 	const flat = text.replace(/\s+/g, " ").trim();
 	if (!flat) return "";
 	return flat.length > max ? `${flat.slice(0, max - 1)}…` : flat;
@@ -261,7 +261,7 @@ interface AssistantMessageLike {
 }
 
 /** Extract the text of the last assistant message in the run. */
-function extractLastAssistantText(messages: unknown[]): string {
+export function extractLastAssistantText(messages: unknown[]): string {
 	if (!Array.isArray(messages)) return "";
 	for (let i = messages.length - 1; i >= 0; i--) {
 		const m = messages[i] as AssistantMessageLike | undefined;

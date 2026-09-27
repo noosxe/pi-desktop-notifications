@@ -54,6 +54,8 @@ ask instead of deviating.
 
 - `pnpm run check` must pass (TypeScript typecheck against the Pi extension
   types).
+- `pnpm test` must pass (zero-dependency node:test suite covering the pure
+  helpers and the extension's event flow via a fake ExtensionAPI).
 - For flake changes, validate all declared systems (`nix flake check`, or at
   minimum `nix eval` of each `devShells.<system>.default`).
 - State in the PR body which checks were run and their results.
