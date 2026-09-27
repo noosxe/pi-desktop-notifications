@@ -64,9 +64,10 @@ ask instead of deviating.
 - Never publish to npm — no `pnpm publish` or `npm publish`. A plain
   `npm publish --dry-run` is allowed for verifying package contents.
 - Versions are `vX.Y.Z` semver git tags on `main`; the first release is
-  v0.1.0. Cutting a release is tag-driven: merge the release PR (or push the
-  tag) and the release workflow (`.github/workflows/release.yml`) creates the
-  git tag and GitHub release and publishes to npm on the owner's behalf.
+  v0.1.0. Cutting a release is a deliberate owner action: push the tag
+  (`git tag vX.Y.Z && git push origin vX.Y.Z`) and the release workflow
+  (`.github/workflows/release.yml`) creates the GitHub release and publishes
+  to npm on the owner's behalf. Merging a version bump alone never releases.
   That workflow is the only thing allowed to perform release actions —
   agents still never run them locally.
 
