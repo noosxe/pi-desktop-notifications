@@ -31,10 +31,10 @@
             ]
             # Tools to exercise the notification backends on each platform.
             # macOS: osascript is a system binary and always present.
-            ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+            ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
               terminal-notifier # preferred macOS backend
             ]
-            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+            ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
               libnotify # notify-send
               dunst # dunstify + reference notification daemon
             ];
