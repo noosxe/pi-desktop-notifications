@@ -38,6 +38,21 @@ ask instead of deviating.
   (commands run and their results), and any follow-up work.
 - Link to related issues or prior PRs when relevant.
 
+## Side-missions and follow-ups
+
+- Work stays focused: when a task uncovers a bug, quirk, refactor idea, or any
+  other out-of-scope work, do not fold it into the current change by default.
+  File a GitHub issue immediately with `gh issue create` — clear title, what
+  was found, where, why it matters, and a suggested approach if known.
+- Always file issues for follow-ups discovered during work, even small ones;
+  the issue is the memory, not the conversation.
+- Mention the new issue in the current PR body so the discovery stays
+  traceable, then continue with the original task.
+- Narrow exception: a fix that the current change itself requires in order to
+  be correct (e.g. a bug in the code being modified that the new tests
+  expose) may stay in the same PR, but it must be called out explicitly in
+  the PR body.
+
 ## Handling local changes
 
 - Never blindly discard changes. Do not use `git restore .`, `git checkout .`,
