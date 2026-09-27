@@ -53,6 +53,21 @@ ask instead of deviating.
   expose) may stay in the same PR, but it must be called out explicitly in
   the PR body.
 
+## Releases and publishing
+
+- Cutting a release is the owner's job. Agents may prepare release PRs (e.g.
+  via `pnpm release`, which bumps the version and opens the PR), but release
+  actions themselves are owner-only:
+- Never create, push, or delete git tags — no `git tag`,
+  `git push origin <tag>`, or `git push --delete origin <tag>`.
+- Never create or modify GitHub releases — no `gh release create/edit/upload`.
+- Never publish to npm — no `pnpm publish` or `npm publish`. A plain
+  `npm publish --dry-run` is allowed for verifying package contents.
+- Versions are `vX.Y.Z` semver git tags on `main`; the first release is
+  v0.1.0. Owner flow after merging a release PR: `git tag vX.Y.Z &&
+  git push origin vX.Y.Z`, then `gh release create vX.Y.Z --generate-notes`,
+  then `pnpm publish`.
+
 ## Handling local changes
 
 - Never blindly discard changes. Do not use `git restore .`, `git checkout .`,
