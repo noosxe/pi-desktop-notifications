@@ -93,14 +93,19 @@ test("readConfig: min interval parsing", () => {
 	withEnv({ PI_NOTIFY_MIN_INTERVAL: "abc" }, () => {
 		assert.equal(readConfig().minIntervalMs, 1500);
 	});
+	withEnv({ PI_NOTIFY_MIN_INTERVAL: "" }, () => {
+		// empty string is treated as unset
+		assert.equal(readConfig().minIntervalMs, 1500);
+	});
+
 	withEnv({ PI_NOTIFY_MIN_INTERVAL: "-5" }, () => {
 		// negative values clamp to 0, effectively disabling the throttle
 		assert.equal(readConfig().minIntervalMs, 0);
 	});
 	withEnv({ PI_NOTIFY_MIN_INTERVAL: "0" }, () => {
-		// pinned quirk: parseInt("0") is falsy, so || 1500 kicks in —
-		// setting 0 currently yields the default instead of disabling the throttle
-		assert.equal(readConfig().minIntervalMs, 1500);
+		// 0 disables the throttle entirely (fixes #7; used to fall back to the
+		// default because parseInt("0") is falsy and || 1500 kicked in)
+		assert.equal(readConfig().minIntervalMs, 0);
 	});
 });
 
