@@ -1,0 +1,10 @@
+# pnpm settings for this single-package repository.
+#
+# Transitive dependencies of the @earendil-works/pi-coding-agent devDependency
+# ship build scripts that `pnpm run check` (tsc) never needs, so they are
+# explicitly denied below (pnpm >= 11 `allowBuilds` map; regenerate with
+# `pnpm approve-builds`).
+allowBuilds:
+  '@google/genai': false
+  esbuild: false
+  protobufjs: false

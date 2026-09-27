@@ -111,13 +111,13 @@ PI_NOTIFY_SOUND=Pop PI_NOTIFY_URGENCY=critical pi
 ## Development
 
 ```bash
-npm install
-npm run check   # typecheck with the real Pi extension types
+pnpm install
+pnpm run check   # typecheck with the real Pi extension types
 ```
 
-Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git,
+Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git, pnpm,
 and the notification tools for your platform (`terminal-notifier` on macOS,
-`libnotify` + `dunst` on Linux), and runs `npm install` on first entry:
+`libnotify` + `dunst` on Linux), and runs `pnpm install` on first entry:
 
 ```bash
 nix develop

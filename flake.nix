@@ -25,7 +25,8 @@
           packages =
             with pkgs;
             [
-              nodejs_22 # pi requires node >= 22.19; npm included for dev dependencies
+              nodejs_22 # pi requires node >= 22.19
+              pnpm # package manager, version matches the packageManager field in package.json
               git
             ]
             # Tools to exercise the notification backends on each platform.
@@ -40,8 +41,8 @@
 
           shellHook = ''
             if [ ! -d node_modules ]; then
-              echo "pi-desktop-notifications: installing npm dev dependencies..."
-              npm install --no-fund --no-audit
+              echo "pi-desktop-notifications: installing dependencies with pnpm..."
+              pnpm install --frozen-lockfile
             fi
             echo "pi-desktop-notifications dev shell — node $(node --version)"
             echo "test notifications from pi with: /notify test"

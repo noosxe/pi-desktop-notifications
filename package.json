@@ -7,6 +7,10 @@
 	"pi": {
 		"extensions": ["./index.ts"]
 	},
+	"engines": {
+		"node": ">=22.19.0"
+	},
+	"packageManager": "pnpm@11.25.0",
 	"scripts": {
 		"check": "tsc --noEmit"
 	},
