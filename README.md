@@ -1,5 +1,7 @@
 # pi-desktop-notifications
 
+[![CI](https://github.com/noosxe/pi-desktop-notifications/actions/workflows/ci.yml/badge.svg)](https://github.com/noosxe/pi-desktop-notifications/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/pi-desktop-notifications)](https://www.npmjs.com/package/pi-desktop-notifications) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 A [Pi](https://github.com/earendil-works/pi) coding agent extension that sends
 **native desktop notifications** on **macOS** and **Linux** when:
 
