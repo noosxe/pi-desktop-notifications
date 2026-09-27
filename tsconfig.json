@@ -3,6 +3,7 @@
 		"target": "ES2022",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
 		"lib": ["ES2022"],
 		"types": ["node"],
 		"strict": true,
@@ -11,5 +12,5 @@
 		"skipLibCheck": true,
 		"noEmit": true
 	},
-	"include": ["index.ts"]
+	"include": ["index.ts", "test/**/*.ts"]
 }

@@ -113,6 +113,7 @@ PI_NOTIFY_SOUND=Pop PI_NOTIFY_URGENCY=critical pi
 ```bash
 pnpm install
 pnpm run check   # typecheck with the real Pi extension types
+pnpm test        # dependency-free node:test suite (helpers + event flow)
 ```
 
 Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git, pnpm,

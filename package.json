@@ -12,7 +12,8 @@
 	},
 	"packageManager": "pnpm@11.25.0",
 	"scripts": {
-		"check": "tsc --noEmit"
+		"check": "tsc --noEmit",
+		"test": "node --test test/*.test.ts"
 	},
 	"keywords": [
 		"pi",
