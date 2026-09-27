@@ -115,6 +115,17 @@ npm install
 npm run check   # typecheck with the real Pi extension types
 ```
 
+Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git,
+and the notification tools for your platform (`terminal-notifier` on macOS,
+`libnotify` + `dunst` on Linux), and runs `npm install` on first entry:
+
+```bash
+nix develop
+```
+
+Supports `x86_64-linux`, `aarch64-linux`, and `aarch64-darwin` (Apple Silicon;
+nixpkgs 26.11 dropped Intel Mac support).
+
 Then load it directly while iterating:
 
 ```bash
