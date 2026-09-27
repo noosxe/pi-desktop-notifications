@@ -22,3 +22,19 @@ updates:
       npm-all:
         patterns:
           - "*"
+
+# GitHub Actions workflow updates (ci.yml pins actions by major tag): same
+# weekly cadence, 1-day cooldown, and single grouped PR as npm. Major bumps
+# are deliberately NOT ignored — unlike devDependencies, action majors are
+# how GitHub ships runner-runtime changes, and this repo tracks latest
+# majors by policy.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+    groups:
+      actions-all:
+        patterns:
+          - "*"
