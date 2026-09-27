@@ -16,27 +16,27 @@ notifies too.
 
 ## Install
 
-### Option A — user extensions directory (recommended)
+### Option A — install as a Pi package (recommended)
 
 ```bash
-git clone <this-repo> ~/.pi/agent/extensions/pi-desktop-notifications
+pi install npm:pi-desktop-notifications
 ```
 
-Pi loads subdirectories in the extensions directory that contain an
-`index.ts`, so this is all it takes. Restart Pi or run `/reload`.
+Installs from npm and registers the package in your personal Pi settings
+(`~/.pi/agent/settings.json`). Restart Pi or run `/reload`, then start Pi
+normally. Pin a version with `pi install npm:pi-desktop-notifications@<version>`
+and stay current with `pi update --extensions`.
 
-### Option B — per-project
+### Option B — try it in a single session
 
 ```bash
-git clone <this-repo> .pi/extensions/pi-desktop-notifications
+pi -e npm:pi-desktop-notifications
 ```
 
-### Option C — try it without installing
-
-```bash
-pi --extension /path/to/pi-desktop-notifications/index.ts
-```
-
+`-e` (`--extension`) loads the package for one invocation without adding it to
+your settings — nothing is installed or persisted. Swap `pi` for your usual
+invocation (e.g. `pi -e npm:pi-desktop-notifications -p "long task"`) to get
+notified in scripted runs too.
 ## Verify
 
 Start Pi and run:
