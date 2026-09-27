@@ -1,0 +1,24 @@
+# Weekly npm dependency updates for the dev toolchain, grouped into a single
+# pull request to keep noise low.
+#
+# - Major version updates are ignored: a major bump of a devDependency
+#   deserves a dedicated, human-scheduled change, not an automated PR.
+# - Cooldown of 1 day: a release younger than 24h is never proposed, so
+#   freshly published (potentially compromised) versions cannot be picked
+#   up in the first wave. Security updates deliberately bypass cooldown.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    groups:
+      npm-all:
+        patterns:
+          - "*"
