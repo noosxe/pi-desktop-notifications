@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# pi session data
+.pi/
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+
+# environment / secrets
+.env
+.env.*
+
+# logs & OS junk
+*.log
+.DS_Store
+Thumbs.db

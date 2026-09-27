@@ -1,0 +1,24 @@
+{
+	"name": "pi-desktop-notifications",
+	"version": "0.1.0",
+	"description": "Pi coding agent extension: native desktop notifications on macOS and Linux when the agent needs input or finishes a run",
+	"type": "module",
+	"main": "index.ts",
+	"scripts": {
+		"check": "tsc --noEmit"
+	},
+	"keywords": [
+		"pi",
+		"pi-extension",
+		"notifications",
+		"desktop-notifications",
+		"macos",
+		"linux"
+	],
+	"license": "MIT",
+	"devDependencies": {
+		"@earendil-works/pi-coding-agent": "^0.87.1",
+		"@types/node": "^22.0.0",
+		"typescript": "^5.7.0"
+	}
+}
