@@ -100,7 +100,7 @@ The first available backend is used; on failure the chain falls through:
 | `PI_NOTIFY_URGENCY` | `normal` | Linux urgency: `low`, `normal`, `critical` |
 | `PI_NOTIFY_PROMPT` | `1` | Notify when blocked on an extension dialog; `0` disables |
 | `PI_NOTIFY_ABORT` | `0` | Also notify when a run is aborted (usually you aborted it, so off) |
-| `PI_NOTIFY_MIN_INTERVAL` | `1500` | Minimum milliseconds between two notifications |
+| `PI_NOTIFY_MIN_INTERVAL` | `1500` | Minimum milliseconds between two notifications; `0` disables the throttle |
 
 Example:
 

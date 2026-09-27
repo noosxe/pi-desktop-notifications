@@ -36,13 +36,16 @@ export interface NotifyConfig {
 	notifyOnPrompt: boolean;
 	/** Notify when a run is aborted — usually user-initiated, so off (PI_NOTIFY_ABORT). */
 	notifyOnAbort: boolean;
-	/** Min milliseconds between two notifications, anti-spam (PI_NOTIFY_MIN_INTERVAL). */
+	/** Min milliseconds between two notifications, anti-spam; 0 disables (PI_NOTIFY_MIN_INTERVAL). */
 	minIntervalMs: number;
 }
 
 export function readConfig(): NotifyConfig {
 	const env = process.env;
 	const urgency = (env.PI_NOTIFY_URGENCY ?? "normal").toLowerCase();
+	const minInterval = env.PI_NOTIFY_MIN_INTERVAL
+		? Number.parseInt(env.PI_NOTIFY_MIN_INTERVAL, 10)
+		: Number.NaN;
 	return {
 		enabled: env.PI_NOTIFY !== "0",
 		sound:
@@ -53,10 +56,9 @@ export function readConfig(): NotifyConfig {
 			urgency === "low" || urgency === "critical" ? urgency : "normal",
 		notifyOnPrompt: env.PI_NOTIFY_PROMPT !== "0",
 		notifyOnAbort: env.PI_NOTIFY_ABORT === "1",
-		minIntervalMs: Math.max(
-			0,
-			Number.parseInt(env.PI_NOTIFY_MIN_INTERVAL ?? "1500", 10) || 1500,
-		),
+		minIntervalMs: Number.isNaN(minInterval)
+			? 1500
+			: Math.max(0, minInterval),
 	};
 }
 
