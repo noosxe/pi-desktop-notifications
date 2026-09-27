@@ -10,6 +10,13 @@ import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-a
 import { fakePi, withEnv, withPlatform } from "./support.ts";
 import type { ExecCall } from "./support.ts";
 
+// Deterministic platform: the default-flow assertions below are darwin-shaped
+// (terminal-notifier argv), and the module-level backend probe cache in
+// index.ts persists across tests in this process. Pin the platform so the
+// host running the suite never leaks into the results; tests that need a
+// different platform override explicitly via withPlatform("linux", ...).
+Object.defineProperty(process, "platform", { value: "darwin", configurable: true });
+
 type Handler = (event: any, ctx: ExtensionContext) => unknown;
 
 interface Harness {
