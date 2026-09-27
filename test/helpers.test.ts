@@ -81,7 +81,14 @@ test("readConfig: prompt and abort toggles", () => {
 		assert.equal(readConfig().notifyOnAbort, true);
 	});
 	withEnv({ PI_NOTIFY_ABORT: "true" }, () => {
-		// only exact "1" enables abort notifications
+		// 1/true accepted case-insensitively (fixes #8; used to be exact "1" only)
+		assert.equal(readConfig().notifyOnAbort, true);
+	});
+	withEnv({ PI_NOTIFY_ABORT: "TRUE" }, () => {
+		assert.equal(readConfig().notifyOnAbort, true);
+	});
+	withEnv({ PI_NOTIFY_ABORT: "yes" }, () => {
+		// anything else stays off
 		assert.equal(readConfig().notifyOnAbort, false);
 	});
 });
