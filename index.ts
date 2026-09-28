@@ -143,10 +143,6 @@ export function sendOsc(title: string, body: string): boolean {
 	}
 }
 
-interface SendOptions {
-	/** Treat as an error notification (used for potential urgency mapping). */
-	isError?: boolean;
-}
 
 export async function sendWithBackend(
 	pi: ExtensionAPI,
@@ -154,7 +150,6 @@ export async function sendWithBackend(
 	title: string,
 	body: string,
 	config: NotifyConfig,
-	options: SendOptions = {},
 ): Promise<boolean> {
 	switch (backend) {
 		case "terminal-notifier": {
@@ -218,13 +213,12 @@ async function sendNotification(
 	config: NotifyConfig,
 	title: string,
 	body: string,
-	options: SendOptions = {},
 ): Promise<{ delivered: boolean; backend?: Backend; error?: string }> {
 	const candidates = await backendCandidates(pi);
 	let lastError: string | undefined;
 	for (const backend of candidates) {
 		try {
-			if (await sendWithBackend(pi, backend, title, body, config, options)) {
+			if (await sendWithBackend(pi, backend, title, body, config)) {
 				return { delivered: true, backend };
 			}
 			lastError = `${BACKEND_LABELS[backend]} exited non-zero`;
@@ -351,10 +345,8 @@ export default function (pi: ExtensionAPI) {
 		const project = projectName(ctx.cwd);
 		const title = `Pi · ${project}`;
 		let body: string;
-		let isError = false;
 
 		if (lastOutcome === "error") {
-			isError = true;
 			body = "❌ Run ended with an error — ready for next steps";
 		} else if (lastOutcome === "aborted") {
 			if (!config.notifyOnAbort) return;
@@ -364,7 +356,7 @@ export default function (pi: ExtensionAPI) {
 			body = `✅ ${snippet}`;
 		}
 
-		await sendNotification(pi, ctx, config, title, body, { isError });
+		await sendNotification(pi, ctx, config, title, body);
 	});
 
 	// Blocking extension dialogs (confirm/select/input/editor) shown mid-run
@@ -409,7 +401,6 @@ export default function (pi: ExtensionAPI) {
 				case "test": {
 					// Re-probe so a freshly installed notifier is picked up.
 					binProbeCache.clear();
-					const candidates = await backendCandidates(pi, true);
 					const title = `Pi · ${projectName(ctx.cwd)}`;
 					const body = arg || "Test notification — it works!";
 					const result = await sendNotification(
