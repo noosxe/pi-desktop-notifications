@@ -1,16 +1,16 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"lib": ["ES2022"],
-		"types": ["node"],
-		"strict": true,
-		"noUncheckedIndexedAccess": true,
-		"noFallthroughCasesInSwitch": true,
-		"skipLibCheck": true,
-		"noEmit": true
-	},
-	"include": ["index.ts", "test/**/*.ts"]
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["index.ts", "test/**/*.ts"]
 }

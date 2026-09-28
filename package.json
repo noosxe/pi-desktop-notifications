@@ -1,59 +1,59 @@
 {
-	"name": "pi-desktop-notifications",
-	"version": "0.1.0",
-	"description": "Pi coding agent extension: native desktop notifications on macOS and Linux when the agent needs input or finishes a run",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/noosxe/pi-desktop-notifications.git"
-	},
-	"files": [
-		"index.ts",
-		"README.md",
-		"LICENSE"
-	],
-	"type": "module",
-	"main": "index.ts",
-	"pi": {
-		"extensions": [
-			"./index.ts"
-		]
-	},
-	"engines": {
-		"node": ">=22.19.0"
-	},
-	"packageManager": "pnpm@11.25.0",
-	"scripts": {
-		"check": "tsc --noEmit",
-		"lint": "oxlint .",
-		"test": "node --test test/*.test.ts",
-		"fmt": "oxfmt .",
-		"fmt:check": "oxfmt --check .",
-		"prepublishOnly": "pnpm run check && pnpm test",
-		"release": "node scripts/release.js"
-	},
-	"keywords": [
-		"pi",
-		"pi-extension",
-		"pi-package",
-		"notifications",
-		"desktop-notifications",
-		"macos",
-		"linux"
-	],
-	"license": "MIT",
-	"peerDependencies": {
-		"@earendil-works/pi-coding-agent": ">=0.87.1"
-	},
-	"peerDependenciesMeta": {
-		"@earendil-works/pi-coding-agent": {
-			"optional": true
-		}
-	},
-	"devDependencies": {
-		"@earendil-works/pi-coding-agent": "^0.87.1",
-		"@types/node": "^22.0.0",
-		"oxfmt": "^0.70.0",
-		"oxlint": "^1.85.0",
-		"typescript": "^5.7.0"
-	}
+  "name": "pi-desktop-notifications",
+  "version": "0.1.0",
+  "description": "Pi coding agent extension: native desktop notifications on macOS and Linux when the agent needs input or finishes a run",
+  "keywords": [
+    "desktop-notifications",
+    "linux",
+    "macos",
+    "notifications",
+    "pi",
+    "pi-extension",
+    "pi-package"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noosxe/pi-desktop-notifications.git"
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "lint": "oxlint .",
+    "test": "node --test test/*.test.ts",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "prepublishOnly": "pnpm run check && pnpm test",
+    "release": "node scripts/release.js"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.87.1",
+    "@types/node": "^22.0.0",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.87.1"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
 }

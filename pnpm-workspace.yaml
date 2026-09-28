@@ -5,6 +5,6 @@
 # explicitly denied below (pnpm >= 11 `allowBuilds` map; regenerate with
 # `pnpm approve-builds`).
 allowBuilds:
-  '@google/genai': false
+  "@google/genai": false
   esbuild: false
   protobufjs: false
