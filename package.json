@@ -14,7 +14,9 @@
 	"type": "module",
 	"main": "index.ts",
 	"pi": {
-		"extensions": ["./index.ts"]
+		"extensions": [
+			"./index.ts"
+		]
 	},
 	"engines": {
 		"node": ">=22.19.0"
@@ -22,7 +24,10 @@
 	"packageManager": "pnpm@11.25.0",
 	"scripts": {
 		"check": "tsc --noEmit",
+		"lint": "oxlint .",
 		"test": "node --test test/*.test.ts",
+		"fmt": "oxfmt .",
+		"fmt:check": "oxfmt --check .",
 		"prepublishOnly": "pnpm run check && pnpm test",
 		"release": "node scripts/release.js"
 	},
@@ -47,6 +52,8 @@
 	"devDependencies": {
 		"@earendil-works/pi-coding-agent": "^0.87.1",
 		"@types/node": "^22.0.0",
+		"oxfmt": "^0.70.0",
+		"oxlint": "^1.85.0",
 		"typescript": "^5.7.0"
 	}
 }
