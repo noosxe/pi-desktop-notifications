@@ -39,6 +39,7 @@ pi -e npm:pi-desktop-notifications
 your settings — nothing is installed or persisted. Swap `pi` for your usual
 invocation (e.g. `pi -e npm:pi-desktop-notifications -p "long task"`) to get
 notified in scripted runs too.
+
 ## Verify
 
 Start Pi and run:
@@ -52,11 +53,11 @@ delivered it.
 
 ## The `/notify` command
 
-| Command | Effect |
-|---|---|
-| `/notify` or `/notify status` | Show enabled state and detected backend |
-| `/notify on` / `/notify off` | Enable/disable for this session |
-| `/notify test [message]` | Send a test notification (re-probes for notifiers) |
+| Command                       | Effect                                             |
+| ----------------------------- | -------------------------------------------------- |
+| `/notify` or `/notify status` | Show enabled state and detected backend            |
+| `/notify on` / `/notify off`  | Enable/disable for this session                    |
+| `/notify test [message]`      | Send a test notification (re-probes for notifiers) |
 
 ## How it works
 
@@ -75,13 +76,13 @@ problem can never break the agent.
 
 The first available backend is used; on failure the chain falls through:
 
-| Platform | Order |
-|---|---|
-| macOS | `terminal-notifier` → `osascript` → OSC 777/99 terminal escape |
-| Linux | `notify-send` → `dunstify` → OSC 777/99 terminal escape |
+| Platform | Order                                                          |
+| -------- | -------------------------------------------------------------- |
+| macOS    | `terminal-notifier` → `osascript` → OSC 777/99 terminal escape |
+| Linux    | `notify-send` → `dunstify` → OSC 777/99 terminal escape        |
 
 - **macOS**: `osascript` is built in. Notifications may be attributed to
-  *Script Editor* and your terminal app must have notification permission
+  _Script Editor_ and your terminal app must have notification permission
   (System Settings → Notifications). For nicer attribution, install
   [`terminal-notifier`](https://github.com/julienXX/terminal-notifier)
   (`brew install terminal-notifier`) — it is picked up automatically.
@@ -95,14 +96,14 @@ The first available backend is used; on failure the chain falls through:
 
 ## Configuration (environment variables)
 
-| Variable | Default | Description |
-|---|---|---|
-| `PI_NOTIFY` | `1` | Master switch; `0` starts disabled |
-| `PI_NOTIFY_SOUND` | `Glass` | macOS sound name (`none` or empty to disable) |
-| `PI_NOTIFY_URGENCY` | `normal` | Linux urgency: `low`, `normal`, `critical` |
-| `PI_NOTIFY_PROMPT` | `1` | Notify when blocked on an extension dialog; `0` disables |
-| `PI_NOTIFY_ABORT` | `0` | Also notify when a run is aborted; set to `1` or `true` (case-insensitive) to enable |
-| `PI_NOTIFY_MIN_INTERVAL` | `1500` | Minimum milliseconds between two notifications; `0` disables the throttle |
+| Variable                 | Default  | Description                                                                          |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------ |
+| `PI_NOTIFY`              | `1`      | Master switch; `0` starts disabled                                                   |
+| `PI_NOTIFY_SOUND`        | `Glass`  | macOS sound name (`none` or empty to disable)                                        |
+| `PI_NOTIFY_URGENCY`      | `normal` | Linux urgency: `low`, `normal`, `critical`                                           |
+| `PI_NOTIFY_PROMPT`       | `1`      | Notify when blocked on an extension dialog; `0` disables                             |
+| `PI_NOTIFY_ABORT`        | `0`      | Also notify when a run is aborted; set to `1` or `true` (case-insensitive) to enable |
+| `PI_NOTIFY_MIN_INTERVAL` | `1500`   | Minimum milliseconds between two notifications; `0` disables the throttle            |
 
 Example:
 
@@ -128,7 +129,6 @@ and the notification tools for your platform (`terminal-notifier` on macOS,
 ```bash
 nix develop
 ```
-
 
 If you use [direnv](https://direnv.net/), `direnv allow` once in the repo root loads the
 same shell automatically whenever you `cd` in — no `nix develop` wrapper needed.
