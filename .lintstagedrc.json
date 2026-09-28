@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json.schemastore.org/lint-staged.json",
+  "*.{js,mjs,cjs,ts,mts,cts}": ["oxfmt", "oxlint"],
+  "*.{json,jsonc,yaml,yml,toml,md}": ["oxfmt"]
+}

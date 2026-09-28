@@ -122,6 +122,8 @@ pnpm run fmt     # oxfmt — format the repository in place
 pnpm run fmt:check  # verify formatting (the CI gate; run `pnpm run fmt` to fix)
 ```
 
+A husky pre-commit hook runs oxfmt and oxlint on staged files on every commit; it installs itself via the `prepare` script when you `pnpm install`.
+
 Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git, pnpm,
 and the notification tools for your platform (`terminal-notifier` on macOS,
 `libnotify` + `dunst` on Linux), and runs `pnpm install` on first entry:
