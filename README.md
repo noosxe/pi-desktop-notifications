@@ -115,7 +115,10 @@ PI_NOTIFY_SOUND=Pop PI_NOTIFY_URGENCY=critical pi
 ```bash
 pnpm install
 pnpm run check   # typecheck with the real Pi extension types
+pnpm run lint    # oxlint — correctness rules on all TS/JS sources
 pnpm test        # dependency-free node:test suite (helpers + event flow)
+pnpm run fmt     # oxfmt — format the repository in place
+pnpm run fmt:check  # verify formatting (the CI gate; run `pnpm run fmt` to fix)
 ```
 
 Or use the Nix dev shell, which provides Node (≥ 22.19, as Pi requires), git, pnpm,

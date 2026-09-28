@@ -89,6 +89,8 @@ ask instead of deviating.
   types).
 - `pnpm test` must pass (zero-dependency node:test suite covering the pure
   helpers and the extension's event flow via a fake ExtensionAPI).
+- `pnpm run lint` must pass (oxlint, correctness category; config in `.oxlintrc.json`).
+- `pnpm run fmt:check` must pass (oxfmt; run `pnpm run fmt` if it flags anything).
 - For flake changes, validate all declared systems (`nix flake check`, or at
   minimum `nix eval` of each `devShells.<system>.default`).
 - State in the PR body which checks were run and their results.
