@@ -7,7 +7,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import factory from "../index.ts";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import { fakePi, withEnv, withPlatform } from "./support.ts";
+import { withEnv, withPlatform } from "./support.ts";
 import type { ExecCall } from "./support.ts";
 
 // Deterministic platform: the default-flow assertions below are darwin-shaped
