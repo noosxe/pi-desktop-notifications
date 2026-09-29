@@ -63,13 +63,17 @@ ask instead of deviating.
 - Never create or modify GitHub releases — no `gh release create/edit/upload`.
 - Never publish to npm — no `pnpm publish` or `npm publish`. A plain
   `npm publish --dry-run` is allowed for verifying package contents.
-- Versions are `vX.Y.Z` semver git tags on `main`; the first release is
-  v0.1.0. Cutting a release is a deliberate owner action: push the tag
-  (`git tag vX.Y.Z && git push origin vX.Y.Z`) and the release workflow
-  (`.github/workflows/release.yml`) creates the GitHub release and publishes
-  to npm on the owner's behalf. Merging a version bump alone never releases.
-  That workflow is the only thing allowed to perform release actions —
-  agents still never run them locally.
+- Release flow: `pnpm release <type>` opens a version-bump PR whose commit is
+  `chore(release): bump version to vX.Y.Z`. Merging that PR is the release
+  trigger: the release workflow (`.github/workflows/release.yml`) tags the
+  release commit on main as `vX.Y.Z`, gates on typecheck + tests, creates the
+  GitHub release, and publishes to npm on the owner's behalf. The commit
+  subject is the release marker — only a merge whose HEAD is a
+  `chore(release): bump version to vX.Y.Z` commit releases; everything else
+  landing on main (including edits to the workflow itself) is inert.
+- Escape hatch: the owner may manually push a `vX.Y.Z` tag on the release
+  commit to (re-)run the release workflow. Versions are `vX.Y.Z` semver git
+  tags on `main`; the first release is v0.1.0.
 
 ## Handling local changes
 

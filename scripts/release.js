@@ -4,9 +4,10 @@
 // version bump, flake.nix version sync (when the flake declares one), and a
 // `gh pr create` against main.
 //
-// Cutting the actual release is the OWNER's job (see AGENTS.md): after the
-// release PR is merged, the owner tags vX.Y.Z, creates the GitHub release,
-// and publishes to npm. This script intentionally stops before any of that.
+// Merging the release PR is the release trigger (see AGENTS.md): the
+// release workflow tags the release commit on main as vX.Y.Z, gates on
+// typecheck + tests, creates the GitHub release, and publishes to npm.
+// This script intentionally stops at opening the PR.
 //
 // Usage: node scripts/release.js <patch|minor|major|X.Y.Z>
 import { execSync } from "node:child_process";
@@ -131,18 +132,18 @@ try {
   // 11. Create Pull Request
   console.log("Creating Pull Request to main...");
   sh(
-    `gh pr create --title "${commitMsg}" --body "Automated version bump to ${tag} in preparation for release." --base main --head ${branchName}`,
+    `gh pr create --title "${commitMsg}" --body "Automated version bump to ${tag}. Merging this PR releases ${tag}: the release workflow tags the release commit, creates the GitHub release, and publishes to npm." --base main --head ${branchName}`,
     { stdio: "inherit" },
   );
 
   console.log(`\nRelease PR created successfully! Switched to branch ${branchName}.`);
   console.log(
-    `\nAfter the PR is merged, cutting the release is the OWNER's job (AGENTS.md):\n` +
-      `  git checkout main && git pull --ff-only\n` +
-      `  git tag ${tag} && git push origin ${tag}\n` +
-      `  gh release create ${tag} --generate-notes\n` +
-      `  pnpm publish\n` +
-      `Agents must not run these steps.`,
+    `\nMerging this PR releases ${tag} automatically (AGENTS.md):\n` +
+      `  the release workflow tags the release commit on main, creates\n` +
+      `  the GitHub release, and publishes to npm.\n` +
+      `Escape hatch (owner only): push the tag manually on the release\n` +
+      `commit - git tag ${tag} && git push origin ${tag}.\n` +
+      `Agents must not push tags, create releases, or publish to npm.`,
   );
 } catch (error) {
   console.error("Release script failed:", error.message);

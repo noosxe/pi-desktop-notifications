@@ -1,17 +1,28 @@
 name: Release
 
-# Releases are strictly owner-initiated: the trigger is a pushed vX.Y.Z tag
-# and nothing else. Merging a version bump to main never releases, and adding
-# or changing this workflow never releases. On the tag push the workflow
-# verifies the tag against package.json, gates on typecheck + tests, creates
-# the GitHub release, and publishes to npm on the owner's behalf.
+# One workflow, two triggers:
+#
+# 1. Merge trigger: a push to main whose HEAD commit is a release commit -
+#    subject "chore(release): bump version to vX.Y.Z", exactly what
+#    `pnpm release` produces (rebase merges keep the subject verbatim).
+#    The workflow tags that commit, gates on typecheck + tests, creates the
+#    GitHub release, and publishes to npm. Every other push to main is a
+#    no-op, including edits to this workflow itself.
+# 2. Escape hatch: a manually pushed vX.Y.Z tag (on the release commit)
+#    (re-)runs the same release path.
+#
+# The tag this workflow pushes uses GITHUB_TOKEN, which deliberately does not
+# re-trigger this workflow (GitHub recursive-workflow prevention) - detection,
+# tagging, and releasing must therefore stay in this single workflow.
 on:
   push:
+    branches:
+      - main
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
 permissions:
-  contents: write # create the GitHub release
+  contents: write # push the release tag and create the GitHub release
   id-token: write # npm provenance / trusted publishing (OIDC)
 
 concurrency:
@@ -19,18 +30,72 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check:
+    name: Check if release is needed
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.decide.outputs.should_release }}
+      tag_name: ${{ steps.decide.outputs.tag_name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # existing tags must be visible
+
+      - name: Decide
+        id: decide
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "Tag push - releasing $GITHUB_REF_NAME."
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "tag_name=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Main push: release only when HEAD is a release commit produced by
+          # `pnpm release` (rebase merges keep its subject verbatim on main).
+          SUBJECT="$(git log -1 --format=%s)"
+          RELEASE_RE='^chore\(release\):[[:space:]]+bump[[:space:]]+version[[:space:]]+to[[:space:]]+(v[0-9]+\.[0-9]+\.[0-9]+[0-9A-Za-z.-]*)$'
+          if [[ ! "$SUBJECT" =~ $RELEASE_RE ]]; then
+            echo "HEAD is not a release commit (\"$SUBJECT\") - nothing to do."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          MSG_VERSION="${BASH_REMATCH[1]}"
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$MSG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Release commit says $MSG_VERSION but package.json is $PKG_VERSION."
+            exit 1
+          fi
+
+          if git rev-parse -q --verify "refs/tags/$PKG_VERSION" >/dev/null; then
+            echo "Tag $PKG_VERSION already exists - nothing to do."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Release commit for $PKG_VERSION on main - releasing."
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+          echo "tag_name=$PKG_VERSION" >> "$GITHUB_OUTPUT"
+
   release:
     name: Check, test, and publish
+    needs: check
+    if: needs.check.outputs.should_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Verify tag matches package version
         run: |
+          TAG_NAME="${{ needs.check.outputs.tag_name }}"
           PKG_VERSION="v$(node -p "require('./package.json').version")"
-          if [ "$PKG_VERSION" != "$GITHUB_REF_NAME" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME does not match package version $PKG_VERSION"
+          if [ "$PKG_VERSION" != "$TAG_NAME" ]; then
+            echo "::error::Tag $TAG_NAME does not match package version $PKG_VERSION"
             exit 1
           fi
           echo "Releasing $PKG_VERSION"
@@ -53,13 +118,33 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      # Runs after the gates so a failing run leaves no stray tag behind.
+      # Idempotent so a re-run of a partially completed release works.
+      - name: Tag the release commit
+        if: github.ref == 'refs/heads/main'
+        run: |
+          TAG_NAME="${{ needs.check.outputs.tag_name }}"
+          if git ls-remote --exit-code origin "refs/tags/$TAG_NAME" >/dev/null; then
+            echo "Tag $TAG_NAME already exists on origin - skipping."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --generate-notes
+          TAG_NAME="${{ needs.check.outputs.tag_name }}"
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            echo "GitHub release for $TAG_NAME already exists - skipping."
+          else
+            gh release create "$TAG_NAME" \
+              --title "$TAG_NAME" \
+              --generate-notes
+          fi
 
       - name: Publish to npm
         run: |
