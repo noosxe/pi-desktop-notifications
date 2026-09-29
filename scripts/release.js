@@ -132,7 +132,7 @@ try {
   // 11. Create Pull Request
   console.log("Creating Pull Request to main...");
   sh(
-    `gh pr create --title "${commitMsg}" --body "Automated version bump to ${tag}. Merging this PR releases ${tag}: the release workflow tags the release commit, creates the GitHub release, and publishes to npm." --base main --head ${branchName}`,
+    `gh pr create --title "${commitMsg}" --assignee "@me" --body "Automated version bump to ${tag}. Merging this PR releases ${tag}: the release workflow tags the release commit, creates the GitHub release, and publishes to npm." --base main --head ${branchName}`,
     { stdio: "inherit" },
   );
 
