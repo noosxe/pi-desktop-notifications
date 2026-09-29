@@ -132,7 +132,7 @@ try {
   // 11. Create Pull Request
   console.log("Creating Pull Request to main...");
   sh(
-    `gh pr create --title "${commitMsg}" --assignee "@me" --body "Automated version bump to ${tag}. Merging this PR releases ${tag}: the release workflow tags the release commit, creates the GitHub release, and publishes to npm." --base main --head ${branchName}`,
+    `gh pr create --title "${commitMsg}" --assignee "@me" --body "Automated version bump to ${tag}. Merging this PR releases ${tag}: the release workflow tags the release commit, creates the GitHub release, and stages the npm publish (approve it with 2FA on npmjs.com)." --base main --head ${branchName}`,
     { stdio: "inherit" },
   );
 
@@ -140,7 +140,8 @@ try {
   console.log(
     `\nMerging this PR releases ${tag} automatically (AGENTS.md):\n` +
       `  the release workflow tags the release commit on main, creates\n` +
-      `  the GitHub release, and publishes to npm.\n` +
+      `  the GitHub release, and stages the npm publish. Approve the\n` +
+      `  staged package with 2FA on npmjs.com to finish the release.\n` +
       `Escape hatch (owner only): push the tag manually on the release\n` +
       `commit - git tag ${tag} && git push origin ${tag}.\n` +
       `Agents must not push tags, create releases, or publish to npm.`,

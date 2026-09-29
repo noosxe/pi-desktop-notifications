@@ -5,9 +5,10 @@ name: Release
 # 1. Merge trigger: a push to main whose HEAD commit is a release commit -
 #    subject "chore(release): bump version to vX.Y.Z", exactly what
 #    `pnpm release` produces (rebase merges keep the subject verbatim).
-#    The workflow tags that commit, gates on typecheck + tests, creates the
-#    GitHub release, and publishes to npm. Every other push to main is a
-#    no-op, including edits to this workflow itself.
+#    The workflow tags that commit, gates on typecheck + tests, creates
+#    the GitHub release, and stages the package on npm; a maintainer
+#    approves the staged package with 2FA before it goes live. Every
+#    other push to main is a no-op, including edits to this workflow itself.
 # 2. Escape hatch: a manually pushed vX.Y.Z tag (on the release commit)
 #    (re-)runs the same release path.
 #
@@ -148,10 +149,16 @@ jobs:
 
       - name: Publish to npm
         run: |
+          # Staged publishing: the version lands in a staging area and a
+          # maintainer must approve it with 2FA (npmjs.com "Staged Packages"
+          # tab, or `npm stage approve <id>`) before it goes live.
+          # npm stage publish needs npm >= 11.15; Node 22 bundles older.
+          npm install -g npm@^11.15.0
           NAME="$(node -p "require('./package.json').name")"
           VERSION="$(node -p "require('./package.json').version")"
           if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
             echo "$NAME@$VERSION is already on npm - skipping publish."
           else
-            pnpm publish --access public --provenance --no-git-checks
+            npm stage publish --access public
+            echo "$NAME@$VERSION is staged - approve it with 2FA on npmjs.com to go live."
           fi

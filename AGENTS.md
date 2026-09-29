@@ -67,7 +67,9 @@ ask instead of deviating.
   `chore(release): bump version to vX.Y.Z`. Merging that PR is the release
   trigger: the release workflow (`.github/workflows/release.yml`) tags the
   release commit on main as `vX.Y.Z`, gates on typecheck + tests, creates the
-  GitHub release, and publishes to npm on the owner's behalf. The commit
+  GitHub release, and stages the npm publish. The owner approves the staged
+  package with 2FA on npmjs.com (Staged Packages tab) to make it live; npm
+  versions never appear without that human approval. The commit
   subject is the release marker — only a merge whose HEAD is a
   `chore(release): bump version to vX.Y.Z` commit releases; everything else
   landing on main (including edits to the workflow itself) is inert.
